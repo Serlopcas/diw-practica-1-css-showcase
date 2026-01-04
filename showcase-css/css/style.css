@@ -19,9 +19,18 @@
 
   --r: 20px;
   --space: 18px;
+  --anchor-offset: 83px;
 
   --title: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   --body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+@media (max-width: 630px) {
+  :root { --anchor-offset: 131px; }
+}
+
+@media (max-width: 400px) {
+  :root { --anchor-offset: 271px; }
 }
 
 /* ============================================================================
@@ -78,6 +87,10 @@ a {
   left: 0;
   height: 1px;
   width: 1px;
+}
+
+:where(section, .scroll-anchor)[id] {
+  scroll-margin-top: var(--anchor-offset);
 }
 
 /* ============================================================================
@@ -416,7 +429,6 @@ a {
   ============================================================================= */
 .hero {
   position: relative;
-  padding: 80px 0;
   background-image:
     linear-gradient(180deg, rgba(7, 12, 18, 0.58), rgba(7, 12, 18, 0.88)),
     url("../img/hero/hero.jpg");
@@ -596,18 +608,18 @@ a {
   }
 }
 
-/* =============================================================================
-   7) Routes
-   - Assignment-oriented selector demo (pattern/highlight).
-   ============================================================================= */
+/* ============================================================================
+  7) Routes
+  - Assignment-oriented selector demo (pattern/highlight).
+  ============================================================================= */
 #routes .card:nth-child(2n) {
   border-color: rgba(94, 231, 255, 0.22);
 }
 
-/* =============================================================================
-   8) Dogs
-   - Image styling + “ice cut” silhouettes via clip-path patterns.
-   ============================================================================= */
+/* ============================================================================
+  8) Dogs
+  - Image styling + “ice cut” silhouettes via clip-path patterns.
+  ============================================================================= */
 .dog__img {
   width: 100%;
   height: 220px;
@@ -634,10 +646,10 @@ a {
   transform: scale(1.01);
 }
 
-/* =============================================================================
-   9) Gallery
-   - Background-image tiles with a dark gradient overlay for caption legibility.
-   ============================================================================= */
+/* ============================================================================
+  9) Gallery
+  - Background-image tiles with a dark gradient overlay for caption legibility.
+  ============================================================================= */
 .gallery {
   grid-template-columns: 1fr;
 }
@@ -696,10 +708,10 @@ a {
   text-overflow: ellipsis;
 }
 
-/* =============================================================================
-   10) Form
-   - Visible validation states for email inputs (assignment-friendly).
-   ============================================================================= */
+/* ============================================================================
+  10) Form
+  - Visible validation states for email inputs (assignment-friendly).
+  ============================================================================= */
 .form {
   display: grid;
   gap: 12px;
@@ -749,9 +761,9 @@ input[type="email"]:valid {
   line-height: 1.4;
 }
 
-/* =============================================================================
-   11) Footer
-   ============================================================================= */
+/* ============================================================================
+  11) Footer
+  ============================================================================= */
 .footer {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 22px 0;
