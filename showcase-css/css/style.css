@@ -1,0 +1,795 @@
+/* ===========================================================================
+  Freky’s Winter Hut — Stylesheet
+  Notes:
+  - Organized by layers: tokens → base → layout → components → sections.
+  ============================================================================ */
+
+/* ===========================================================================
+  1) Design tokens
+  - Single source of truth for theme + spacing + typography.
+  ============================================================================ */
+:root {
+  --bg: #070c12;
+  --bg2: #0b1220;
+  --surface: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.14);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.72);
+  --accent: #5ee7ff;
+
+  --r: 20px;
+  --space: 18px;
+
+  --title: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* ============================================================================
+  2) Base / reset
+  ============================================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body);
+  color: var(--text);
+  /* Subtle aurora-like ambience behind all sections */
+  background:
+    radial-gradient(900px 600px at 10% 10%, rgba(94, 231, 255, 0.14), transparent 55%),
+    radial-gradient(900px 600px at 90% 90%, rgba(2, 228, 141, 0.274), transparent 55%),
+    radial-gradient(900px 600px at 40% 60%, rgba(4, 217, 255, 0.14), transparent 55%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  background: none;
+}
+
+/* Keyboard focus styling:
+   - Strong, consistent ring across the site.
+   - Rounded so it reads well on pill buttons and rounded cards. */
+:focus-visible {
+  outline: 3px solid rgba(94, 231, 255, 0.70);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* ============================================================================
+  3) Layout / helpers
+  ============================================================================= */
+.container {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* Tiny anchor for "scroll to top" patterns.
+   Kept minimal so it doesn’t affect layout/paint. */
+.scroll-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 1px;
+}
+
+/* ============================================================================
+  4) Global components
+  ============================================================================= */
+
+/* Buttons:
+   Shared base + simple variants (primary/ghost/small). */
+.btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 12px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .25s ease, border-color .25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(94, 231, 255, 0.30);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, rgba(94, 231, 255, 0.92), rgba(110, 160, 255, 0.88));
+  color: #071018;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.btn--small {
+  padding: 10px 12px;
+  font-size: 0.95em;
+}
+
+/* Section primitives:
+   Used by all page sections for consistent spacing/typography. */
+.section {
+  padding: 56px 0;
+}
+
+.section--alt {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 60%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.section__title {
+  font-family: var(--title);
+  margin: 0 0 10px 0;
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem);
+}
+
+.section__subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Grid + Card:
+   Default to 1 column, switch to 3 columns at tablet+. */
+.grid {
+  display: grid;
+  gap: var(--space);
+  grid-template-columns: 1fr;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--r);
+  padding: 22px;
+  position: relative;
+}
+
+.card__title {
+  font-family: var(--title);
+  margin: 0 0 10px 0;
+}
+
+.card__text {
+  margin: 0 0 12px 0;
+  color: var(--muted);
+}
+
+.meta {
+  margin: 0 0 14px 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ============================================================================
+  4.1) Micro-interactions — 3D tilt (opt-in)
+  - Applied only to elements carrying .tilt.
+  - Gallery keeps tilt as a dedicated visual component.
+  ============================================================================= */
+.tilt,
+.gallery__item {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  .tilt:hover,
+  .tilt:focus-within,
+  .gallery__item:hover,
+  .gallery__item:focus-within {
+    transform: perspective(900px) rotateX(3deg) rotateY(-5deg) translateY(-2px);
+  }
+}
+
+/* “Ice shine” overlay: sits above content via translateZ. */
+.tilt::before,
+.gallery__item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(600px 220px at 20% 0%,
+      rgba(94, 231, 255, 0.14),
+      transparent 55%);
+  transform: translateZ(18px);
+  transition: opacity .25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  .tilt:hover::before,
+  .tilt:focus-within::before,
+  .gallery__item:hover::before,
+  .gallery__item:focus-within::before {
+    opacity: 1;
+  }
+}
+
+/* Respect reduced motion preferences: keep layout static. */
+@media (prefers-reduced-motion: reduce) {
+
+  .tilt:hover,
+  .tilt:focus-within,
+  .gallery__item:hover,
+  .gallery__item:focus-within {
+    transform: none;
+  }
+
+  .tilt::before,
+  .gallery__item::before {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+  5) Header / Nav
+  ============================================================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* Glass header: readable while preserving background ambience */
+  background: rgba(7, 12, 18, 0.55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* Keeps header aligned with .container width without extra wrapper */
+  padding: 14px max(16px, calc((100% - 1100px) / 2));
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand__logo {
+  height: 40px;
+  width: auto;
+}
+
+.brand__text {
+  font-family: var(--title);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 6px 14px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
+  align-items: center;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.84);
+  transition: background-color .25s ease, transform .2s ease;
+}
+
+/* Unified ring for interactive pills (nav + primary CTA + footer socials).
+   Outline is suppressed for these elements to avoid double focus rings. */
+.header .nav__link:hover,
+.header .btn.btn--primary:hover,
+.header .nav__link:active,
+.header .btn.btn--primary:active,
+.header .nav__link:focus-visible,
+.header .btn.btn--primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(94, 231, 255, 0.70);
+}
+
+/* Icon-only navigation with label reveal on hover/focus-visible. */
+.nav__link span {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width .18s, opacity .18s, margin-left .18s;
+  margin-left: 0;
+}
+
+.nav__link:hover span,
+.nav__link:focus-visible span {
+  max-width: 200px;
+  opacity: 1;
+  margin-left: 6px;
+}
+
+/* Responsive header behavior:
+   - Under 900px: nav wraps and brand text hides.
+   - Under 768px: simplify header layout (CTA hidden).
+   - Under 630px/400px: progressively stack controls. */
+@media (max-width: 900px) {
+  .nav {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* Mobile UX: show labels always (no hover). Prevents “pop” on breakpoint switches. */
+  .nav__link span {
+    max-width: 200px;
+    opacity: 1;
+    margin-left: 6px;
+    transition: none;
+  }
+
+  .brand__text {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header .brand {
+    flex: 0 0 auto;
+    position: static;
+    transform: none;
+  }
+
+  .header .btn--primary {
+    display: none;
+  }
+
+  .header .nav {
+    position: static;
+    transform: none;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 630px) {
+  .header .nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 14px;
+    justify-items: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .header .brand {
+    margin-bottom: 10px;
+  }
+
+  .header .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+/* ============================================================================
+  6) Hero
+  ============================================================================= */
+.hero {
+  position: relative;
+  padding: 80px 0;
+  background-image:
+    linear-gradient(180deg, rgba(7, 12, 18, 0.58), rgba(7, 12, 18, 0.88)),
+    url("../img/hero/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background:
+    /* Tail: long low ellipse (purple→green), sits left of the core */
+    radial-gradient(ellipse 220px 36px at 13% 60%, rgba(180, 0, 255, 0.35) 0%, rgba(0, 255, 120, 0.30) 85%, transparent 100%),
+    /* Core: rounded ellipse (green), sits right of the tail */
+    radial-gradient(ellipse 90px 90px at 22% 60%, rgba(0, 255, 120, 0.55) 0%, rgba(0, 255, 120, 0.32) 70%, transparent 100%);
+  mix-blend-mode: screen;
+  opacity: 0.68;
+  filter: blur(16px);
+  animation: aurora-comet-x 8s linear infinite;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+/* Brand watermark:
+   Masked so it fades at the edges and doesn’t look like a hard rectangle. */
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  bottom: -30px;
+  width: 420px;
+  height: 420px;
+
+  background: url("../img/Logo.png") no-repeat center / contain;
+  opacity: 0.07;
+  transform: rotate(-10deg);
+  pointer-events: none;
+
+  filter: blur(0.6px);
+
+  -webkit-mask-image: radial-gradient(circle at 55% 55%,
+      #000 58%,
+      rgba(0, 0, 0, 0.55) 74%,
+      rgba(0, 0, 0, 0.0) 100%);
+  mask-image: radial-gradient(circle at 55% 55%,
+      #000 58%,
+      rgba(0, 0, 0, 0.55) 74%,
+      rgba(0, 0, 0, 0.0) 100%);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 70ch;
+}
+
+.hero__title {
+  font-family: var(--title);
+  font-size: clamp(2.2rem, 1.5rem + 2.5vw, 3.2rem);
+  margin: 12px 0;
+}
+
+.hero__lead {
+  margin: 0 0 18px 0;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.badge {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hero__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Small “scroll hint” dot */
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(94, 231, 255, 0.9);
+  animation: dot 1.4s ease-in-out infinite;
+}
+
+/* Hero motion */
+@keyframes aurora-comet-x {
+
+  /* Sine-like drift: X travels across, Y oscillates slightly for an aurora sweep */
+  0% {
+    transform: translateX(-100vw) translateY(0px) scale(1.1, 0.55) rotate(-8deg);
+    filter: blur(18px) brightness(1.03);
+  }
+
+  10% {
+    transform: translateX(-80vw) translateY(-20px) scale(1.09, 0.6) rotate(-6deg);
+    filter: blur(17px) brightness(1.05);
+  }
+
+  20% {
+    transform: translateX(-60vw) translateY(-32px) scale(1.08, 0.65) rotate(-4deg);
+    filter: blur(17px) brightness(1.05);
+  }
+
+  30% {
+    transform: translateX(-40vw) translateY(-20px) scale(1.07, 0.7) rotate(-2deg);
+    filter: blur(16px) brightness(1.04);
+  }
+
+  40% {
+    transform: translateX(-20vw) translateY(0px) scale(1.06, 0.72) rotate(0deg);
+    filter: blur(16px) brightness(1.02);
+  }
+
+  50% {
+    transform: translateX(0vw) translateY(20px) scale(1.06, 0.7) rotate(2deg);
+    filter: blur(15px) brightness(1.01);
+  }
+
+  60% {
+    transform: translateX(20vw) translateY(32px) scale(1.08, 0.65) rotate(4deg);
+    filter: blur(16px) brightness(1.02);
+  }
+
+  70% {
+    transform: translateX(40vw) translateY(20px) scale(1.1, 0.6) rotate(6deg);
+    filter: blur(16px) brightness(1.04);
+  }
+
+  80% {
+    transform: translateX(60vw) translateY(0px) scale(1.12, 0.55) rotate(8deg);
+    filter: blur(16px) brightness(1.05);
+  }
+
+  90% {
+    transform: translateX(80vw) translateY(-20px) scale(1.18, 0.6) rotate(10deg);
+    filter: blur(17px) brightness(1.02);
+  }
+
+  100% {
+    transform: translateX(100vw) translateY(0px) scale(1.2, 0.5) rotate(12deg);
+    filter: blur(18px) brightness(1.01);
+  }
+}
+
+@keyframes dot {
+  0% {
+    transform: translateX(-50%) translateY(-8px);
+    opacity: 0.5;
+  }
+
+  60% {
+    transform: translateX(-50%) translateY(8px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(8px);
+    opacity: 0.2;
+  }
+}
+
+/* =============================================================================
+   7) Routes
+   - Assignment-oriented selector demo (pattern/highlight).
+   ============================================================================= */
+#routes .card:nth-child(2n) {
+  border-color: rgba(94, 231, 255, 0.22);
+}
+
+/* =============================================================================
+   8) Dogs
+   - Image styling + “ice cut” silhouettes via clip-path patterns.
+   ============================================================================= */
+.dog__img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  filter: grayscale(55%) contrast(1.05);
+  transition: filter .25s ease, transform .25s ease;
+}
+
+.dog.card:nth-child(3n+1) .dog__img {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 55% 100%, 45% 85%, 0% 85%);
+}
+
+.dog.card:nth-child(3n+2) .dog__img {
+  clip-path: polygon(10% 0%, 90% 0%, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0% 80%, 0% 20%);
+}
+
+.dog.card:nth-child(3n) .dog__img {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 85% 100%, 15% 100%, 0% 90%);
+}
+
+.dog:hover .dog__img {
+  filter: grayscale(0%) contrast(1.08);
+  transform: scale(1.01);
+}
+
+/* =============================================================================
+   9) Gallery
+   - Background-image tiles with a dark gradient overlay for caption legibility.
+   ============================================================================= */
+.gallery {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gallery__item {
+  height: 220px;
+  border-radius: var(--r);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.gallery__item:nth-child(1) {
+  background-image: url("../img/Gallery01.png");
+}
+
+.gallery__item:nth-child(2) {
+  background-image: url("../img/Gallery02.png");
+}
+
+.gallery__item:nth-child(3) {
+  background-image: url("../img/Gallery03.png");
+}
+
+.gallery__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(7, 12, 18, 0.85) 100%);
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+}
+
+.gallery__item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(94, 231, 255, 0.22);
+}
+
+.gallery__cap {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  font-family: var(--title);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =============================================================================
+   10) Form
+   - Visible validation states for email inputs (assignment-friendly).
+   ============================================================================= */
+.form {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+  margin: 24px auto 0;
+}
+
+.form__label {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.95em;
+}
+
+.form__input {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.form__input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.form__input:focus {
+  border-color: rgba(94, 231, 255, 0.45);
+  outline: none;
+}
+
+input[type="email"]:invalid {
+  border-color: rgba(255, 90, 90, 0.45);
+}
+
+input[type="email"]:valid {
+  border-color: rgba(94, 231, 255, 0.45);
+}
+
+.link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form__hint {
+  margin: 6px 0 0 0;
+  color: var(--muted);
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+/* =============================================================================
+   11) Footer
+   ============================================================================= */
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px 0;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer__text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.footer__social {
+  display: flex;
+  gap: 10px;
+}
+
+.social {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  display: grid;
+  place-items: center;
+}
+
+/* Footer social links: same ring behavior as nav pills */
+.footer .social:hover,
+.footer .social:active,
+.footer .social:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(94, 231, 255, 0.70);
+}
