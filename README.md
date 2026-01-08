@@ -33,7 +33,7 @@ advanced image styling, Font Awesome icons, external typography, and responsive 
 The project follows this structure.
 
 ```
-/diw-practica-1-css-showcase
+/css-showcase
 ├── index.html
 ├── /css
 │   └── style.css
