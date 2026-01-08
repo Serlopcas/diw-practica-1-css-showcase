@@ -33,7 +33,7 @@ advanced image styling, Font Awesome icons, external typography, and responsive 
 The project follows this structure.
 
 ```
-/css-showcase
+/showcase-css
 ├── index.html
 ├── /css
 │   └── style.css
