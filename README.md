@@ -126,7 +126,7 @@ No build step required.
 
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone git@github.com:Serlopcas/diw-practica-1-css-showcase.git
    ```
 2. Open `index.html` directly in your browser, **or** use a local server:
    ```bash
@@ -137,15 +137,6 @@ No build step required.
    ```
    http://localhost:5500
    ```
-
-
-## Deployment (GitHub Pages)
-
-1. Push to GitHub.
-2. Go to **Settings → Pages**.
-3. Deploy from **branch**: `main` and folder `/ (root)`.
-4. Your site will be available at your GitHub Pages URL.
-
 
 ## Credits
 
